@@ -1,0 +1,29 @@
+{
+  "name": "recursive-blame",
+  "version": "0.0.0",
+  "description": "Recursive blame for Git",
+  "main": "index.js",
+  "keywords": [
+    "git",
+    "blame"
+  ],
+  "homepage": "https://github.com/scottgonzalez/recursive-blame",
+  "bugs": "https://github.com/scottgonzalez/recursive-blame/issues",
+  "author": {
+    "name": "Scott González",
+    "email": "scott.gonzalez@gmail.com",
+    "url": "http://scottgonzalez.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/scottgonzalez/recursive-blame.git"
+  },
+  "license": "MIT",
+  "bin": {
+    "recursive-blame": "./index.js"
+  },
+  "dependencies": {
+    "git-tools": "0.0.5",
+    "colors": "0.6.2"
+  }
+}
