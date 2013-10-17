@@ -10,6 +10,8 @@ var committish = "HEAD";
 var _context = 4;
 var repo = new Repo( "." );
 
+var actionPrompt = "Next action [r,n,p,c,d,q,?]?";
+
 process.stdin.setEncoding( "utf8" );
 
 function prompt( message, fn ) {
@@ -29,6 +31,7 @@ function blame( options, callback ) {
 			return callback( error );
 		}
 
+		var patternIndex = 0;
 		var patternMatches = blame.filter(function( line ) {
 			return pattern.test( line.content );
 		});
@@ -37,19 +40,37 @@ function blame( options, callback ) {
 			return callback( null, null );
 		}
 
-		// TODO: loop over matches
-		var line = patternMatches[ 0 ];
 		function doAction( error, action ) {
 			if ( error ) {
 				return callback( error );
 			}
 
-			if ( action === "n" ) {
-				return callback( null, null );
+			if ( action === "q" ) {
+				process.exit();
 			}
 
-			if ( action === "y" ) {
-				return callback( null, line );
+			if ( action === "r" ) {
+				return callback( null, patternMatches[ patternIndex ] );
+			}
+
+			if ( action === "n" ) {
+				if ( patternIndex === patternMatches.length - 1 ) {
+					console.log( "No more matches." );
+					return prompt( actionPrompt, doAction );
+				}
+
+				patternIndex++;
+				return show();
+			}
+
+			if ( action === "p" ) {
+				if ( patternIndex === 0 ) {
+					console.log( "No previous matches." );
+					return prompt( actionPrompt, doAction );
+				}
+
+				patternIndex--;
+				return show();
 			}
 
 			if ( action === "c" ) {
@@ -59,14 +80,14 @@ function blame( options, callback ) {
 
 			if ( action === "d" ) {
 				return showDiff({
-					commit: line.commit,
-					path: line.path
+					commit: patternMatches[ patternIndex ].commit,
+					path: patternMatches[ patternIndex ].path
 				}, function( error ) {
 					if ( error ) {
 						return callback( error );
 					}
 
-					prompt( "View previous revision [y,n,c,d,?]?", doAction );
+					prompt( actionPrompt, doAction );
 				});
 			}
 
@@ -77,7 +98,8 @@ function blame( options, callback ) {
 		function show() {
 			showPatternMatch({
 				full: blame,
-				line: line,
+				patternMatches: patternMatches,
+				patternIndex: patternIndex,
 				path: options.path,
 				context: context
 			}, doAction );
@@ -88,26 +110,30 @@ function blame( options, callback ) {
 }
 
 function showHelp() {
-	console.log( "y - view previous revision" );
-	console.log( "n - quit; do not view previous revision" );
+	console.log( "r - recurse; view previous revision" );
+	console.log( "n - view next match in current revision" );
+	console.log( "p - view previous match in current revision" );
 	console.log( "c - increase context" );
 	console.log( "d - view diff for current revision" );
+	console.log( "q - quit" );
 	console.log( "? - show help" );
 }
 
 function showPatternMatch( blame, callback ) {
 	var totalLines = blame.full.length;
-	var line = blame.line;
+	var patternIndex = blame.patternIndex + 1;
+	var patternCount = blame.patternMatches.length;
+	var line = blame.patternMatches[ blame.patternIndex ];
 	var context = blame.context;
 	var format =
 		"Commit: %C(yellow)%H%Creset\n" +
 		"Author: %aN <%aE>\n" +
 		"Date:   %cd (%cr)\n" +
 		"Path:   " + blame.path + "\n" +
+		"Match:  " + patternIndex + " of " + patternCount + "\n" +
 		"\n" +
 		"    %s\n";
 
-	// TODO: add author info
 	repo.exec( "log", "--pretty=" + format, "-1", line.commit, function( error, commitInfo ) {
 		if ( error ) {
 			return callback( error );
@@ -128,7 +154,7 @@ function showPatternMatch( blame, callback ) {
 		}
 
 		console.log( "" );
-		prompt( "View previous revision [y,n,c,d,?]?", callback );
+		prompt( actionPrompt, callback );
 	});
 }
 
@@ -150,7 +176,7 @@ function recur( options ) {
 		}
 
 		if ( !line ) {
-			console.log( "Recursive blame complete." );
+			console.log( "No matches. Recursive blame complete." );
 			return;
 		}
 
