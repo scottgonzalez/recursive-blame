@@ -11,6 +11,8 @@ var _context = 4;
 var repo = new Repo( "." );
 
 var actionPrompt = "Next action [r,n,p,c,d,q,?]?";
+var isFirst = true;
+var walking = false;
 
 process.stdin.setEncoding( "utf8" );
 
@@ -96,6 +98,19 @@ function blame( options, callback ) {
 		}
 
 		function show() {
+			if ( isFirst && walking ) {
+				isFirst = false;
+				return repo.resolveCommittish( options.committish.slice( 0, -1 ), function( error, sha ) {
+					if ( error ) {
+						console.log( error );
+						return;
+					}
+
+					console.log( "\n\nPattern removed in " + sha.red );
+					show();
+				});
+			}
+
 			showPatternMatch({
 				full: blame,
 				patternMatches: patternMatches,
@@ -173,13 +188,46 @@ function recur( options ) {
 	blame( options, function( error, line ) {
 		if ( error ) {
 			console.log( error );
-		}
-
-		if ( !line ) {
-			console.log( "No matches. Recursive blame complete." );
 			return;
 		}
 
+		if ( !line ) {
+			if ( !isFirst ) {
+				console.log( "No matches. Recursive blame complete." );
+				return;
+			}
+
+			if ( walking ) {
+				process.stdout.write( new Array( walking.toString().length + 1 ).join( "\b" ) );
+				process.stdout.write( "" + (++walking) );
+
+				return recur({
+					path: options.path,
+					committish: options.committish + "^"
+				});
+			}
+
+			return prompt( "No matches found. Walk through previous revisions?", function( error, action ) {
+				if ( error ) {
+					console.log( error );
+					return;
+				}
+
+				if ( action !== "y" ) {
+					return;
+				}
+
+				walking = 1;
+				process.stdout.write( "Walking revisions: " + walking );
+
+				recur({
+					path: options.path,
+					committish: options.committish + "^"
+				});
+			});
+		}
+
+		isFirst = false;
 		recur({
 			path: line.path,
 			committish: line.commit + "^"
