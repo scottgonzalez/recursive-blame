@@ -23,7 +23,7 @@
     "recursive-blame": "./index.js"
   },
   "dependencies": {
-    "git-tools": "0.0.7",
+    "git-tools": "0.0.8",
     "colors": "0.6.2"
   }
 }
