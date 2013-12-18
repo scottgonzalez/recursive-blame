@@ -6,7 +6,7 @@ Support this project by [donating on Gittip](https://www.gittip.com/scottgonzale
 
 ## About
 
-I often need to trace a blame through many revisions to figure out when a specific change was introduced. This is painful using git or GitHub, especially if the file was renamed at some point. `recusrive-blame` makes tracing through history dead simple.
+I often need to trace a blame through many revisions to figure out when a specific change was introduced. This is painful using git or GitHub, especially if the file was renamed at some point. `recursive-blame` makes tracing through history dead simple.
 
 
 
