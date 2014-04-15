@@ -21,14 +21,16 @@ npm install -g recursive-blame
 ## Usage
 
 ```sh
-recursive-blame <path> <pattern>
+recursive-blame <pattern> <path>
 ```
+
+See [usage.txt](/usage.txt) for full usage documenation.
 
 
 
 ## License
 
-Copyright 2013 Scott González. Released under the terms of the MIT license.
+Copyright 2014 Scott González. Released under the terms of the MIT license.
 
 ---
 

@@ -1,7 +1,7 @@
 SYNOPSIS
 	recursive-blame [options] PATTERN FILE
-	recursive-blame [options] [-p PATTERN] FILE
-	recursive-blame [options] [-p PATTERN] [-f FILE]
+	recursive-blame [options] -p PATTERN FILE
+	recursive-blame [options] -p PATTERN -f FILE
 
 DESCRIPTION
 	Recursive-blame searches the history of a file for lines containing
