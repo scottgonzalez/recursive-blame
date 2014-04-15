@@ -1,15 +1,28 @@
 #!/usr/bin/env node
 
+var fs = require( "fs" );
 var Repo = require( "git-tools" );
 var colors = require( "colors" );
+var minimist = require( "minimist" );
 
-// TODO: option parser
-var path = process.argv[ 2 ];
-var pattern = new RegExp( process.argv[ 3 ] );
+var args = minimist( process.argv.slice( 2 ), {
+	alias: {
+		f: "file",
+		p: "pattern"
+	}
+});
+var path = args.file || args._.pop();
+var rawPattern = args.pattern || args._.pop();
+var pattern = new RegExp( rawPattern );
 var committish = "HEAD";
-var _context = 4;
-var repo = new Repo( "." );
+var initialContext = 4;
 
+if ( !path || !rawPattern ) {
+	console.log( "\n" + fs.readFileSync( "usage.txt", "utf-8" ) );
+	process.exit( 1 );
+}
+
+var repo = new Repo( "." );
 var actionPrompt = "Next action [r,n,p,c,d,q,?]?";
 var isFirst = true;
 var walking = false;
@@ -27,7 +40,7 @@ function prompt( message, fn ) {
 }
 
 function blame( options, callback ) {
-	var context = _context;
+	var context = initialContext;
 	repo.blame( options, function( error, blame ) {
 		if ( error ) {
 			return callback( error );

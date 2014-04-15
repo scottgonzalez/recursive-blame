@@ -1,0 +1,15 @@
+SYNOPSIS
+	recursive-blame PATTERN FILE
+	recursive-blame [-p PATTERN] FILE
+	recursive-blame [-p PATTERN] [-f FILE]
+
+DESCRIPTION
+	Recursive-blame searches the history of a file for lines containing
+	a match to the given PATTERN.
+
+OPTIONS
+	-p, --pattern
+		Regular expression to search for.
+
+	-f, --file
+		Which file to search for the PATTERN.
