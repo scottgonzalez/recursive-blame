@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 var fs = require( "fs" );
+var readline = require( "readline" );
 var Repo = require( "git-tools" );
 var colors = require( "colors" );
 var minimist = require( "minimist" );
@@ -38,6 +39,10 @@ if ( !path || pattern.source === "(?:)" ) {
 	process.exit( 1 );
 }
 
+var rl = readline.createInterface({
+	input: process.stdin,
+	output: process.stdout
+});
 var repo = new Repo( "." );
 var actionPrompt = "Next action [r,n,p,c,d,q,?]?";
 var isFirst = true;
@@ -46,12 +51,8 @@ var walking = false;
 process.stdin.setEncoding( "utf8" );
 
 function prompt( message, fn ) {
-	process.stdout.write( message + " " );
-	process.stdin.resume();
-
-	process.stdin.once( "data", function( chunk ) {
-		process.stdin.pause();
-		fn( null, chunk.trim() );
+	rl.question( message, function( answer ) {
+		fn( null, answer );
 	});
 }
 
