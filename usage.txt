@@ -1,7 +1,6 @@
 SYNOPSIS
 	recursive-blame [options] PATTERN FILE
-	recursive-blame [options] -p PATTERN FILE
-	recursive-blame [options] -p PATTERN -f FILE
+	recursive-blame [options] [-p PATTERN | -e PATTERN] FILE
 
 DESCRIPTION
 	Recursive-blame searches the history of a file for lines containing
@@ -9,10 +8,13 @@ DESCRIPTION
 
 OPTIONS
 	-p PATTERN, --pattern=PATTERN
-		Regular expression to search for.
+		The pattern to search for.
 
 	-f FILE, --file=FILE
 		Which file to search for the PATTERN.
+
+	-e[ PATTERN], --regexp[=PATTERN]
+		Treat the pattern as a regular expression.
 
 	-C NUM, --context=NUM
 		Print NUM lines of output context. Defaults to 4.

@@ -1,6 +1,6 @@
 # Recursive blame for Git
 
-Recursively blame files, filtered by regular expressions.
+Recursively blame files, filtered by patterns.
 
 Support this project by [donating on Gittip](https://www.gittip.com/scottgonzalez/).
 

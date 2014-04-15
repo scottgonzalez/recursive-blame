@@ -5,21 +5,35 @@ var Repo = require( "git-tools" );
 var colors = require( "colors" );
 var minimist = require( "minimist" );
 
+// Parse arguments
 var args = minimist( process.argv.slice( 2 ), {
 	alias: {
 		f: "file",
 		p: "pattern",
 		C: "context",
-		c: "committish"
+		c: "committish",
+		e: "regexp"
 	}
 });
 var path = args.file || args._.pop();
 var rawPattern = args.pattern || args._.pop();
-var pattern = new RegExp( rawPattern );
+var useRegexp = args.regexp || false;
 var committish = args.committish || "HEAD";
 var initialContext = args.context || 4;
 
-if ( !path || !rawPattern ) {
+// Determine pattern
+if ( typeof rawPattern !== "string" ) {
+	rawPattern = "";
+}
+if ( !useRegexp ) {
+	rawPattern = rawPattern.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1" );
+} else if ( typeof useRegexp === "string" ) {
+	rawPattern = useRegexp;
+}
+var pattern = new RegExp( rawPattern );
+
+// Check for required arguments
+if ( !path || pattern.source === "(?:)" ) {
 	console.log( "\n" + fs.readFileSync( "usage.txt", "utf-8" ) );
 	process.exit( 1 );
 }
