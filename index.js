@@ -8,14 +8,16 @@ var minimist = require( "minimist" );
 var args = minimist( process.argv.slice( 2 ), {
 	alias: {
 		f: "file",
-		p: "pattern"
+		p: "pattern",
+		C: "context",
+		c: "committish"
 	}
 });
 var path = args.file || args._.pop();
 var rawPattern = args.pattern || args._.pop();
 var pattern = new RegExp( rawPattern );
-var committish = "HEAD";
-var initialContext = 4;
+var committish = args.committish || "HEAD";
+var initialContext = args.context || 4;
 
 if ( !path || !rawPattern ) {
 	console.log( "\n" + fs.readFileSync( "usage.txt", "utf-8" ) );
