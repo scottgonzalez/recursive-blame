@@ -52,6 +52,7 @@ process.stdin.setEncoding( "utf8" );
 
 function prompt( message, fn ) {
 	rl.question( message, function( answer ) {
+		rl.pause();
 		fn( null, answer );
 	});
 }
