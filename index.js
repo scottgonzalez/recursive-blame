@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 var fs = require( "fs" );
+var path_util = require( "path" );
 var readline = require( "readline" );
 var Repo = require( "git-tools" );
 var colors = require( "colors" );
@@ -35,7 +36,7 @@ var pattern = new RegExp( rawPattern );
 
 // Check for required arguments
 if ( !path || pattern.source === "(?:)" ) {
-	console.log( "\n" + fs.readFileSync( "usage.txt", "utf-8" ) );
+	console.log( "\n" + fs.readFileSync( path_util.resolve( __dirname, "usage.txt" ), "utf-8" ) );
 	process.exit( 1 );
 }
 
