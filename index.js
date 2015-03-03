@@ -35,7 +35,7 @@ var pattern = new RegExp( rawPattern );
 
 // Check for required arguments
 if ( !path || pattern.source === "(?:)" ) {
-	console.log( "\n" + fs.readFileSync( "usage.txt", "utf-8" ) );
+	console.log( "\n" + fs.readFileSync( __dirname + "/usage.txt", "utf-8" ) );
 	process.exit( 1 );
 }
 
