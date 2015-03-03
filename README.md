@@ -30,7 +30,7 @@ See [usage.txt](/usage.txt) for full usage documenation.
 
 ## License
 
-Copyright 2014 Scott González. Released under the terms of the MIT license.
+Copyright Scott González. Released under the terms of the MIT license.
 
 ---
 
