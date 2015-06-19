@@ -39,10 +39,6 @@ if ( !path || pattern.source === "(?:)" ) {
 	process.exit( 1 );
 }
 
-var rl = readline.createInterface({
-	input: process.stdin,
-	output: process.stdout
-});
 var repo = new Repo( "." );
 var actionPrompt = "Next action [r,n,p,c,d,q,?]?";
 var isFirst = true;
@@ -51,8 +47,12 @@ var walking = false;
 process.stdin.setEncoding( "utf8" );
 
 function prompt( message, fn ) {
+	var rl = readline.createInterface({
+		input: process.stdin,
+		output: process.stdout
+	});
 	rl.question( message + " ", function( answer ) {
-		rl.pause();
+		rl.close();
 		fn( null, answer );
 	});
 }
