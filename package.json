@@ -20,7 +20,8 @@
   },
   "license": "MIT",
   "bin": {
-    "recursive-blame": "./index.js"
+    "recursive-blame": "./index.js",
+    "git-recursive-blame": "./index.js"
   },
   "dependencies": {
     "colors": "0.6.2",

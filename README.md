@@ -24,6 +24,12 @@ npm install -g recursive-blame
 recursive-blame <pattern> <path>
 ```
 
+OR:
+
+```sh
+git recursive-blame <pattern> <path>
+```
+
 See [usage.txt](/usage.txt) for full usage documenation.
 
 
